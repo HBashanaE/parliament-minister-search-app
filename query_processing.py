@@ -26,13 +26,11 @@ def classify_intent(query):
             intents.add('ministry')
         if(token in provinces):
             split_base = word_splitter.split(token)['base']
-            query = query.replace(token, split_base)
-            tokenized_query[i] = split_base
+            query = query + split_base
             intents.add('province')
         if(token in parties):
             split_base = word_splitter.split(token)['base']
-            query = query.replace(token, split_base)
-            tokenized_query[i] = split_base
+            query = query + split_base
             intents.add('party')
         if(token in age):
             intents.add('age')
@@ -49,9 +47,12 @@ def build_query(query, tokenized_query, intents):
 
     if('misc' in intents):
         body = {
+                "size": 300,
                 "query":{
-                    "size": 300,
-                    "match": { "_all": query }
+                    "multi_match" : {
+                            "query": query,
+                            "fields": ["name", "committees_currently_in", "committees_was_in", "political_party", "electoral_district", ]
+                        }
                 }
     }
     else:
@@ -76,7 +77,7 @@ def build_query(query, tokenized_query, intents):
             } 
         else:
             body = {
-                "size": 300,
+                    "size": 300,
                     "query":{
                         "match" : {
                             search_fields[0]: query
@@ -98,6 +99,7 @@ def build_age_query(query, tokenized_query):
     lower_age = 18
     age = 0
     range = -1
+    order = 'asc'
 
     for token in tokenized_query:
         split_base = word_splitter.split(token)['base']
@@ -114,20 +116,27 @@ def build_age_query(query, tokenized_query):
             if(range == 1):
                 lower_age = 18
                 upper_age = age
+                order = 'asc'
             else:
                 lower_age = age
                 upper_age = 80
+                order = 'desc'
             break
     else:
         if(any(identifier in tokenized_query for identifier in young_identifiers)):
             lower_age = 18
             upper_age = 35
+            order = 'asc'
         else:
             lower_age = 35
             upper_age = 80
+            order = 'desc'
 
     body = {
         "size": 300,
+        "sort" : { 
+                "date_of_birth" : {"order" : order, "format": "strict_date_optional_time_nanos"}
+                },
         "query": {
             "range": {
             "date_of_birth": {
