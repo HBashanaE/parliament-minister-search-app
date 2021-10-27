@@ -1,0 +1,121 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>පාර්ලිමේන්තු මන්ත්‍රීවරුන් සෙවුම</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-wrapper blue darken-4">
+            <div class="row">
+                <div class="col s5">
+                    <a href="#" style="margin-left:8px" class="brand-logo"> පාර්ලිමේන්තු මන්ත්‍රීවරුන් සෙවුම</a>
+                </div>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <input placeholder="මෙතන සොයන්න..." id="keyword" type="text" class="validate blue-text text-lighten-5">
+                    </div>
+                    <div class="input-field col s2">
+                        <a class="waves-effect waves-light btn blue lighten-2" id="search_btn">සොයන්න</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="row">
+        <div class="col s2">
+
+        </div>
+        <form class="col s8">
+            <div class="row">
+                <div class="col s2">
+                    <span class="Results badge" id="result_count"></span>
+                </div>
+                <div class="col s10">
+
+                </div>
+            </div>
+        </form>
+        <div class="col s2">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s2">
+
+        </div>
+        <div class="col s8" id="result">
+
+        </div>
+        <div class="col s2">
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s4"></div>
+        <div class="col s4">
+            <ul class="pagination" id="search_pagination">
+            </ul>
+        </div>
+        <div class="col s4"></div>
+
+    </div>
+
+    <script src="" async defer></script>
+</body>
+
+<script>
+    var resCount = $("#result_count");
+    var form = 0;
+    var keyword_ = null;
+    var numberOfPaginations = null;
+
+    $("#search_btn").click(function () {
+        var keyword = $("#keyword").val();
+        this.keyword_ = keyword;
+        $.get("./search?query=" + keyword, function (data, status) {
+            console.log(data)
+            populateResults(data)
+        });
+    });
+
+    function populateResults(data) {
+        let results = $("#result");
+        results.html("");
+        resCount.text(`${data.length} ${data.length === 1? "result": "results"}`)
+        data.forEach(element => {
+            results.append(generateResultItem(element))
+        });
+    }
+
+    function generateResultItem(data) {
+
+        let result_item = $(`<div style="border-radius: 1rem;
+                                            padding: 1rem;
+                                            margin: 1rem;
+                                            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);">\
+                        <div>නම: ${data['name']} </div>\
+                        <div>දේශපාලනික පක්ෂය: ${data['political_party']} </div>\
+                        <div>මැතිවරණ දිස්ත්‍රික්කය/ ජාතික ලැයිස්තුව: ${data['electoral_district']}</div>\
+                        <div>උපන් දිනය: ${data['date_of_birth']} </div>\
+                        <div>සිවිල් තත්වය: ${data['civil_status']}</div>\
+                        <div>ආගම: ${data['religion']}</div>\
+                        </div>`
+        );
+        return result_item;
+    }
+
+</script>
+
+</html>
