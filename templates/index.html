@@ -19,7 +19,7 @@
                     <a href="#" style="margin-left:8px" class="brand-logo"> පාර්ලිමේන්තු මන්ත්‍රීවරුන් සෙවුම</a>
                 </div>
                 <div class="row">
-                    <div class="input-field col s5">
+                    <div class="col s5">
                         <input placeholder="මෙතන සොයන්න..." id="keyword" type="text"
                             class="validate blue-text text-lighten-5">
                     </div>
@@ -34,7 +34,7 @@
 
     <div class="row">
         <div class="col s2">
-            
+
         </div>
         <div class="col s8">
             <span class="Results badge" id="result_count"></span>
@@ -54,16 +54,6 @@
         <div class="col s2">
 
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col s4"></div>
-        <div class="col s4">
-            <ul class="pagination" id="search_pagination">
-            </ul>
-        </div>
-        <div class="col s4"></div>
-
     </div>
 
     <script src="" async defer></script>
@@ -101,12 +91,20 @@
                                             padding: 1rem;
                                             margin: 1rem;
                                             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);">\
+                        <div class="row">
+                        <div class="col s6">
                         <div>නම: ${data['name']} </div>\
                         <div>දේශපාලනික පක්ෂය: ${data['political_party']} </div>\
                         <div>මැතිවරණ දිස්ත්‍රික්කය/ ජාතික ලැයිස්තුව: ${data['electoral_district']}</div>\
                         <div>උපන් දිනය: ${data['date_of_birth'] !== null ? data['date_of_birth'] : '-'} (වයස: ${getAge(data['date_of_birth'])}) </div>\
                         <div>සිවිල් තත්වය: ${data['civil_status'] !== null ? data['civil_status'] : '-'}</div>\
                         <div>ආගම: ${data['religion'] !== null ? data['religion'] : '-'}</div>\
+                        </div>
+                        
+                        <div class="col s6" style="justify-content: end; display: flex; padding-right: 3rem; padding-top: 1rem;">
+                            <img src="https://www.parliament.lk/uploads/images/members/profile_images/thumbs/${data['id']}.jpg" style="width:106px;">
+                        </div>
+                    </div>
                         <div>${populateList('සාමාජිකත්වය දරණ කාරක සභා', data['committees_currently_in'])}</div>\
                         <div>${populateList('සාමාජිකත්වය දැරූ කාරක සභා', data['committees_was_in'])}</div>\
                         </div>`
@@ -116,8 +114,7 @@
 
     function populateList(caption, list){
         let commisions = 
-        `
-        <p> ${caption} </p>
+        `<p> ${caption} </p>
         <ul style="padding-left: 4rem;">
             ${list.length < 1 ? "නොමැත": ""}
             ${list.map((item) => {
