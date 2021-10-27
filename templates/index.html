@@ -20,7 +20,8 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s5">
-                        <input placeholder="මෙතන සොයන්න..." id="keyword" type="text" class="validate blue-text text-lighten-5">
+                        <input placeholder="මෙතන සොයන්න..." id="keyword" type="text"
+                            class="validate blue-text text-lighten-5">
                     </div>
                     <div class="input-field col s2">
                         <a class="waves-effect waves-light btn blue lighten-2" id="search_btn">සොයන්න</a>
@@ -76,13 +77,13 @@
 </body>
 
 <script>
-    var resCount = $("#result_count");
-    var form = 0;
-    var keyword_ = null;
-    var numberOfPaginations = null;
+    let resCount = $("#result_count");
+    let keyword_ = null;
 
     $("#search_btn").click(function () {
-        var keyword = $("#keyword").val();
+        let keyword = $("#keyword").val();
+        let results = $("#result");
+        results.html("");
         this.keyword_ = keyword;
         $.get("./search?query=" + keyword, function (data, status) {
             console.log(data)
@@ -93,7 +94,7 @@
     function populateResults(data) {
         let results = $("#result");
         results.html("");
-        resCount.text(`${data.length} ${data.length === 1? "result": "results"}`)
+        resCount.text(`${data.length} ${data.length === 1 ? "result" : "results"}`)
         data.forEach(element => {
             results.append(generateResultItem(element))
         });
@@ -108,12 +109,26 @@
                         <div>නම: ${data['name']} </div>\
                         <div>දේශපාලනික පක්ෂය: ${data['political_party']} </div>\
                         <div>මැතිවරණ දිස්ත්‍රික්කය/ ජාතික ලැයිස්තුව: ${data['electoral_district']}</div>\
-                        <div>උපන් දිනය: ${data['date_of_birth']} </div>\
-                        <div>සිවිල් තත්වය: ${data['civil_status']}</div>\
-                        <div>ආගම: ${data['religion']}</div>\
+                        <div>උපන් දිනය: ${data['date_of_birth'] !== null ? data['date_of_birth'] : '-'} (වයස: ${getAge(data['date_of_birth'])}) </div>\
+                        <div>සිවිල් තත්වය: ${data['civil_status'] !== null ? data['civil_status'] : '-'}</div>\
+                        <div>ආගම: ${data['religion'] !== null ? data['religion'] : '-'}</div>\
                         </div>`
         );
         return result_item;
+    }
+
+    function getAge(dateString) {
+        if(dateString === null){
+            return '-'
+        }
+        let today = new Date();
+        let birthDate = new Date(dateString);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        let m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return `අවුරුදු ${age}`;
     }
 
 </script>
