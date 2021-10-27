@@ -12,6 +12,7 @@ preprocessed_data = []
 for entry in data:
     member_details = {}
 
+    id = entry['mem_intranet_id']
     name = entry['member_sname_sin']
     basic_details = defaultdict(lambda: None, entry['basic_details'])
     political_party = basic_details['දේශපාලන පක්ෂය']
@@ -24,7 +25,7 @@ for entry in data:
     committees_currently_in = entry['commitees_current']
     committees_was_in = entry['commitees_old']
 
-    for variable in ["name", "political_party", "electoral_district", "date_of_birth",
+    for variable in ["id", "name", "political_party", "electoral_district", "date_of_birth",
                      "civil_status", "religion", "position", "profession", "committees_currently_in", "committees_was_in"]:
         member_details[variable] = eval(variable)
     preprocessed_data.append(member_details)
