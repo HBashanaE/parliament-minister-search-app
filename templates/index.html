@@ -7,10 +7,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        .overlay {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background: #222;
+            display: none;
+        }
+
+        .overlay__inner {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .overlay__content {
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner {
+            width: 75px;
+            height: 75px;
+            display: inline-block;
+            border-width: 2px;
+            border-color: rgba(255, 255, 255, 0.05);
+            border-top-color: #fff;
+            animation: spin 1s infinite linear;
+            border-radius: 100%;
+            border-style: solid;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 
 </head>
 
 <body>
+
+    <div id="overlay" class="overlay">
+        <div class="overlay__inner">
+            <div class="overlay__content"><span class="spinner"></span></div>
+        </div>
+    </div>
 
     <nav>
         <div class="nav-wrapper blue darken-4">
@@ -40,7 +90,7 @@
             <span class="Results badge" id="result_count"></span>
         </div>
         <div class="col s2">
-            
+
         </div>
     </div>
 
@@ -62,14 +112,17 @@
 <script>
     let resCount = $("#result_count");
     let keyword_ = null;
+    let overlay = $('#overlay')
 
     $("#search_btn").click(function () {
         let keyword = $("#keyword").val();
         let results = $("#result");
         results.html("");
         resCount.hide()
+        overlay.show()
         this.keyword_ = keyword;
         $.get("./search?query=" + keyword, function (data, status) {
+            overlay.hide()
             console.log(data)
             populateResults(data)
         });
@@ -112,11 +165,11 @@
         return result_item;
     }
 
-    function populateList(caption, list){
-        let commisions = 
-        `<p> ${caption} </p>
+    function populateList(caption, list) {
+        let commisions =
+            `<p> ${caption} </p>
         <ul style="padding-left: 4rem;">
-            ${list.length < 1 ? "නොමැත": ""}
+            ${list.length < 1 ? "නොමැත" : ""}
             ${list.map((item) => {
                 return `<li style="list-style-type:disc;"> ${item} </li>`
             }).join('')}
@@ -125,7 +178,7 @@
     }
 
     function getAge(dateString) {
-        if(dateString === null){
+        if (dateString === null) {
             return '-'
         }
         let today = new Date();
