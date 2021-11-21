@@ -125,6 +125,9 @@
             overlay.hide()
             console.log(data)
             populateResults(data)
+        }).fail(function () {
+            overlay.hide()
+            alert('Backend Error');
         });
     });
 
@@ -148,6 +151,8 @@
                         <div class="col s6">
                         <div>නම: ${data['name']} </div>\
                         <div>දේශපාලනික පක්ෂය: ${data['political_party']} </div>\
+                        <div>තනතුර: ${data['position'] !== null ? data['position'] : '-'}</div>\
+                        <div>වෘත්තිය: ${data['profession'] !== null ? data['profession'] : '-'}</div>\
                         <div>මැතිවරණ දිස්ත්‍රික්කය/ ජාතික ලැයිස්තුව: ${data['electoral_district']}</div>\
                         <div>උපන් දිනය: ${data['date_of_birth'] !== null ? data['date_of_birth'] : '-'} (වයස: ${getAge(data['date_of_birth'])}) </div>\
                         <div>සිවිල් තත්වය: ${data['civil_status'] !== null ? data['civil_status'] : '-'}</div>\
