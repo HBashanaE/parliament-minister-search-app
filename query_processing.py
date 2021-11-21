@@ -18,6 +18,7 @@ def classify_intent(query):
     parties = ["පෙරමුණ", "පෙරමුණේ", "සන්ධානය", "සන්ධානයේ  ", "බලවේගය", "බලවේගයේ", "පක්ෂය", "පක්ෂයේ", "කොංග්‍රස්", "කොංග්‍රසය", "කොන්ග්‍රස්", "කොන්ග්‍රසය", "කොංග්‍රසයේ", "කොන්ග්‍රසයේ",
      "කුට්ටනි", "කච්චි", "විඩුදලෛප්"]
     age = ["වයස", "අවුරුදු", "පරිණත", "ළාබාල", "ලාබාල", "තරුණ", "වයෝවෘධ"]
+    civil_status = ["විවාහක", "අවිවාහක", "විවාහ"]
 
     tokenized_query = tokenize(query, simple_tokenizer)
     intents = set()
@@ -34,6 +35,8 @@ def classify_intent(query):
             intents.add('party')
         if(token in age):
             intents.add('age')
+        if(token in civil_status):
+            intents.add('civil_status')
         else:
             intents.add('misc')
 
@@ -51,7 +54,7 @@ def build_query(query, tokenized_query, intents):
                 "query":{
                     "multi_match" : {
                             "query": query,
-                            "fields": ["name", "committees_currently_in", "committees_was_in", "political_party", "electoral_district", ]
+                            "fields": ["name", "committees_currently_in", "committees_was_in", "political_party", "electoral_district", "profession"]
                         }
                 }
     }
@@ -62,6 +65,8 @@ def build_query(query, tokenized_query, intents):
             search_fields.append('electoral_district')
         if('party' in intents):
             search_fields.append('political_party')
+        if('civil_status' in intents):
+            search_fields.append('civil_status')
         if('age' in intents):
             return build_age_query(query, tokenized_query)
 
