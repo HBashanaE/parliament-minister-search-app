@@ -121,21 +121,21 @@ def build_age_query(query, tokenized_query):
             if(range == 1):
                 lower_age = 18
                 upper_age = age
-                order = 'asc'
+                order = 'desc'
             else:
                 lower_age = age
                 upper_age = 80
-                order = 'desc'
+                order = 'asc'
             break
     else:
         if(any(identifier in tokenized_query for identifier in young_identifiers)):
             lower_age = 18
             upper_age = 35
-            order = 'asc'
+            order = 'desc'
         else:
             lower_age = 35
             upper_age = 80
-            order = 'desc'
+            order = 'asc'
 
     body = {
         "size": 300,
