@@ -93,7 +93,6 @@ def build_query(query, tokenized_query, intents):
 
 
 def build_age_query(query, tokenized_query):
-    ## TODO: Sort age
     
     young_identifiers = ["තරුණ", "ළාබාල", "ලාබාල"]
 
@@ -121,11 +120,11 @@ def build_age_query(query, tokenized_query):
             if(range == 1):
                 lower_age = 18
                 upper_age = age
-                order = 'desc'
+                order = 'asc'
             else:
                 lower_age = age
                 upper_age = 80
-                order = 'asc'
+                order = 'desc'
             break
     else:
         if(any(identifier in tokenized_query for identifier in young_identifiers)):
